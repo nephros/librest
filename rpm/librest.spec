@@ -1,5 +1,5 @@
 Name:          librest
-Version:       0.7.12
+Version:       0.10.2
 Release:       1
 Summary:       A library for access to RESTful web services
 Group:         Development/Libraries
@@ -7,8 +7,12 @@ License:       LGPLv2
 URL:           http://www.gnome.org
 Source0:       %{name}-%{version}.tar.bz2
 
+BuildRequires: meson
+
 BuildRequires: pkgconfig(glib-2.0)
-BuildRequires: pkgconfig(libsoup-2.4)
+BuildRequires: pkgconfig(gobject-2.0)
+#BuildRequires: pkgconfig(libsoup-2.4)
+BuildRequires: pkgconfig(libsoup-3.0)
 BuildRequires: pkgconfig(libxml-2.0)
 BuildRequires: ca-certificates
 Obsoletes:     rest <= 0.7.12
@@ -35,32 +39,33 @@ Files for development with %{name}.
 %setup -q -n %{name}-%{version}/%{name}
 
 %build
-echo "EXTRA_DIST = missing-gtk-doc" > gtk-doc.make
-export LDFLAGS="${LDFLAGS} -lgthread-2.0"
-autoreconf -v -i
-%configure --disable-static --disable-gtk-doc --enable-introspection=no --without-gnome
-
-make %{?jobs:-j%jobs} V=1
+%meson \
+    --buildtype=release \
+    -Dintrospection=false \
+    -Dca_certificates=true \
+    -Dvapi=true \
+    -Dexamples=false \
+    -Dgtk_doc=false \
+    -Dsoup2=false \
+    -Dtests=false \
+    %{nil}
+%meson_build
 
 %install
-rm -rf %{buildroot}
-%make_install
+%meson_install
 
 %post -p /sbin/ldconfig
 
 %postun -p /sbin/ldconfig
 
 %files
-%defattr(-,root,root,-)
-%doc AUTHORS COPYING README
-%{_libdir}/librest-0.7.so.0
-%{_libdir}/librest-0.7.so.0.0.0
-%{_libdir}/librest-extras-0.7.so.0
-%{_libdir}/librest-extras-0.7.so.0.0.0
+%{_libdir}/librest-0.10.so.0
+%{_libdir}/librest-0.10.so.0.0.0
+%{_libdir}/librest-extras-0.10.so.0
+%{_libdir}/librest-extras-0.10.so.0.0.0
 
 %files devel
-%defattr(-,root,root,-)
-%{_includedir}/rest-0.7
+%{_includedir}/rest-0.10
 %{_libdir}/pkgconfig/rest*
-%{_libdir}/librest-0.7.so
+%{_libdir}/librest-0.10.so
 %{_libdir}/librest-extras-0.7.so
