@@ -17,8 +17,7 @@ BuildRequires: cmake
 
 BuildRequires: pkgconfig(glib-2.0)
 BuildRequires: pkgconfig(gobject-2.0)
-#BuildRequires: pkgconfig(libsoup-2.4)
-BuildRequires: pkgconfig(libsoup-3.0)
+BuildRequires: pkgconfig(libsoup-2.4)
 BuildRequires: pkgconfig(libxml-2.0)
 BuildRequires: pkgconfig(json-glib-1.0)
 
@@ -54,7 +53,7 @@ Files for development with %{name}.
     -Dvapi=false \
     -Dexamples=false \
     -Dgtk_doc=false \
-    -Dsoup2=false \
+    -Dsoup2=true \
     -Dtests=false \
     %{nil}
 %meson_build
