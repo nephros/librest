@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index e6433e0..1441591 100644
+--- a/meson.build
++++ b/meson.build
+@@ -28,8 +28,9 @@ if get_option('ca_certificates')
+       '/etc/pki/tls/certs/ca-bundle.crt',
+     ]
+ 
++    fs = import('fs')
+     foreach location : default_certificate_paths
+-      if file_exists(location)
++      if fs.exists(location)
+         ca_certificates_path = location
+         break
+       endif
